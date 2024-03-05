@@ -1,31 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "pipeline": {
-    "vc-prisma#build": {
-      "cache": false,
-      "dependsOn": ["post-install", "db-deploy"],
-      "outputs": []
-    },
-    "vc-prisma#db-migrate": {
-      "cache": false,
-      "dependsOn": ["vc-prisma#db-up"],
-      "inputs": ["./schema.prisma", "./migrations/**/*.sql"],
-      "outputs": []
-    },
-    "vc-prisma#db-seed": {
-      "cache": false,
-      "dependsOn": ["vc-prisma#db-migrate"],
-      "outputs": []
-    },
-    "vc-prisma#db-up": {
-      "cache": false,
-      "outputs": []
-    },
-    "vc-prisma#dx": {
-      "cache": false,
-      "dependsOn": ["vc-prisma#db-migrate"],
-      "outputs": []
-    },
     "vc-admin#build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**"],
@@ -36,33 +11,9 @@
       "outputs": [".next/**"],
       "env": ["NEXT_PUBLIC_WEBAPP_URL", "VERCEL_URL", "NODE_ENV"]
     },
-    "vc-web#dx": {
-      "cache": false,
-      "dependsOn": ["vc-prisma#dx"],
-      "outputs": []
-    },
-    "vc-web#start": {
-      "cache": false,
-      "dependsOn": ["vc-prisma#db-deploy"],
-      "outputs": []
-    },
-
     "build": {
       "dependsOn": ["^build"],
       "outputs": ["dist/**", ".next/**"]
-    },
-    "db-deploy": {
-      "cache": false,
-      "inputs": ["./migrations/**/*.sql", "./prisma/migrations/**/*.sql"],
-      "outputs": []
-    },
-    "db-seed": {
-      "outputs": []
-    },
-    "deploy": {
-      "cache": false,
-      "dependsOn": ["vc-web#build"],
-      "outputs": []
     },
     "clean": {
       "cache": false
@@ -71,10 +22,6 @@
       "dependsOn": ["//#env-check:common"],
       "outputs": [],
       "cache": false
-    },
-    "dx": {
-      "cache": false,
-      "outputs": []
     },
     "lint": {
       "cache": false,
@@ -87,25 +34,6 @@
     "lint:report": {
       "cache": false,
       "outputs": ["lint-results"]
-    },
-    "post-install": {
-      "dependsOn": [],
-      "outputs": [
-        "../../node_modules/@prisma/client/**",
-        "../../node_modules/@prisma/admin-client/**"
-      ],
-      "inputs": ["./schema.prisma", "./prisma/schema.prisma"]
-    },
-    "vc-prisma#post-install": {
-      "cache": false
-    },
-    "start": {},
-    "type-check": {
-      "cache": false,
-      "outputs": []
-    },
-    "vc-prisma#db-reset": {
-      "cache": false
     },
     "//#env-check:common": {
       "cache": false,

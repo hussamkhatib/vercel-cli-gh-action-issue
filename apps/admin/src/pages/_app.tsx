@@ -1,7 +1,6 @@
 import "../styles/globals.css";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AppProps } from "next/app";
-import { trpc } from "vc-trpc/utils/trpc";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -12,4 +11,4 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export default trpc.withTRPC(MyApp);
+export default MyApp;
