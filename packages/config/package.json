@@ -1,0 +1,23 @@
+{
+  "name": "vc-config",
+  "version": "0.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "eslint-preset.js",
+    "prettier-preset.js"
+  ],
+  "dependencies": {
+    "eslint-config-next": "^13.2.1",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-config-turbo": "^0.0.7",
+    "eslint-plugin-prettier": "^4.2.1"
+  },
+  "devDependencies": {
+    "eslint": "^8.34.0",
+    "@trivago/prettier-plugin-sort-imports": "4.1.1",
+    "prettier": "^2.8.7",
+    "prettier-plugin-tailwindcss": "^0.2.6",
+    "eslint-plugin-unused-imports": "^2.0.0"
+  }
+}

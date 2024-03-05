@@ -1,0 +1,50 @@
+{
+  "name": "vc-web",
+  "version": "1.2.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "prettier": "prettier --write ./ --check \"./**/*.{js,jsx,ts,tsx}\""
+  },
+  "engines": {
+    "node": "18",
+    "yarn": ">=1.19.2 < 2.0.0"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.3",
+    "@tanstack/react-query-devtools": "^4.24.4",
+    "class-variance-authority": "^0.4.0",
+    "classnames": "^2.3.2",
+    "eslint-config-next": "14.1.0",
+    "lodash": "^4.17.21",
+    "micro": "^10.0.1",
+    "moment": "^2.29.4",
+    "next": "14.1.0",
+    "nodemailer": "^6.8.0",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-hot-toast": "^2.4.0",
+    "react-otp-input": "^3.1.0",
+    "vc-prisma": "*",
+    "vc-trpc": "*",
+    "vc-tsconfig": "*",
+    "tailwind-merge": "^1.8.1",
+    "tailwindcss-animate": "^1.0.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.0.0",
+    "@types/node": "16.9.1",
+    "@types/nodemailer": "6.4.7",
+    "@types/react": "18.2.56",
+    "@types/react-dom": "^18.0.10",
+    "autoprefixer": "^10.4.12",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.18",
+    "vc-config": "*",
+    "tailwindcss": "3.2.4",
+    "typescript": "5.0"
+  }
+}
