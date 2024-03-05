@@ -1,4 +1,4 @@
-import { Context, UserFromSession } from "./context";
+import { Context } from "./context";
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
@@ -34,5 +34,3 @@ export const middleware = t.middleware;
 
 // @see https://trpc.io/docs/v10/procedures
 export const publicProcedure = t.procedure;
-
-export type TrpcSessionUser = UserFromSession;
