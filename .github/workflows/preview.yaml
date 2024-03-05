@@ -1,7 +1,6 @@
 name: Vercel Preview Deployment
 env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
 on:
   push:
@@ -14,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        app: [web, admin]
+        app: [web]
     outputs:
       web_preview_url: ${{ steps.deploy.outputs.web_preview_url }}
       admin_preview_url: ${{ steps.deploy.outputs.admin_preview_url }}
@@ -25,46 +24,36 @@ jobs:
       - name: Update environment variables
         run: |
           touch .env
-          EMAIL=preview@vercel.com
-          NEXT_PUBLIC_EMAIL=preview_public@vercel.com
+          echo EMAIL=preview@vercel.com >> .env
+          echo NEXT_PUBLIC_EMAIL=preview_public@vercel.com >> .env
 
       - name: Install Vercel CLI
         run: npm install --global vercel@33.2.0
 
       - name: Link Vercel to GitHub Repository
-        run: vercel link --repo --yes --token=${{ env.VERCEL_TOKEN }}
+        run: vercel link --repo --yes --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }}
 
       - name: Pull Vercel Environment Information
         run: |
           if [ "${{ matrix.app }}" == "web" ]; then
-            vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }} --cwd apps/web
+            vercel pull --yes --environment=preview --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/web
           elif [ "${{ matrix.app }}" == "admin" ]; then
-            vercel pull --yes --environment=preview --token=${{ env.VERCEL_TOKEN }} --cwd apps/admin
+            vercel pull --yes --environment=preview --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/admin
           fi
 
       - name: Build Project Artifacts
         run: |
           if [ "${{ matrix.app }}" == "web" ]; then
-            vercel build --token=${{ env.VERCEL_TOKEN }} --cwd apps/web
+            vercel build --token=${{ env.VERCEL_TOKEN }} --scope=hussam-shippercrmc --cwd apps/web
           elif [ "${{ matrix.app }}" == "admin" ]; then
-            vercel build --token=${{ env.VERCEL_TOKEN }} --cwd apps/admin
+            vercel build --token=${{ env.VERCEL_TOKEN }} --scope=hussam-shippercrmc --cwd apps/admin
           fi
 
       - name: Deploy Project Artifacts to Vercel
+        id: deploy
         run: |
           if [ "${{ matrix.app }}" == "web" ]; then
-          echo web_preview_url=$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }} --cwd apps/web) >> $GITHUB_OUTPUT
+          echo web_preview_url=$(vercel deploy --prebuilt --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/web) >> $GITHUB_OUTPUT
           elif [ "${{ matrix.app }}" == "admin" ]; then
-          echo admin_preview_url=$(vercel deploy --prebuilt --token=${{ env.VERCEL_TOKEN }} --cwd apps/admin) >> $GITHUB_OUTPUT
+          echo admin_preview_url=$(vercel deploy --prebuilt --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/admin) >> $GITHUB_OUTPUT
           fi
-
-  comment-preview:
-    runs-on: ubuntu-latest
-    needs: Deploy-Preview
-    steps:
-      - name: Comment on Pull Request
-        uses: thollander/actions-comment-pull-request@v2
-        with:
-          message: |
-            VERCEL Web Preview URL :rocket: : ${{ needs.deploy-preview.outputs.web_preview_url }}
-            VERCEL Admin Preview URL :rocket: : ${{ needs.deploy-preview.outputs.admin_preview_url }}
