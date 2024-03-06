@@ -14,6 +14,7 @@ export default function Home({
       <hr />
       <p>VERCEL_URL: {vercelUrl}</p>
       <p>NEXT_PUBLIC_VERCEL_URL: {process.env.NEXT_PUBLIC_VERCEL_URL}</p>
+      <p>NEXT_PUBLIC_WEBAPP_URL: {process.env.NEXT_PUBLIC_WEBAPP_URL}</p>
     </div>
   );
 }
