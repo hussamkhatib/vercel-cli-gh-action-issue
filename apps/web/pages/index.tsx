@@ -22,8 +22,8 @@ export default function Home({
 export const getServerSideProps = async () => {
   return {
     props: {
-      email: process.env.EMAIL,
-      vercelUrl: process.env.VERCEL_URL,
+      email: process.env.EMAIL ?? "",
+      vercelUrl: process.env.VERCEL_URL ?? "",
     },
   };
 };
