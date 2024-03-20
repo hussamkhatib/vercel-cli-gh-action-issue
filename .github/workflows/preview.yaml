@@ -1,0 +1,59 @@
+name: Vercel Preview Deployment
+env:
+  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+
+on:
+  push:
+    branches-ignore:
+      - main
+
+jobs:
+  Deploy-Preview:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [web]
+    outputs:
+      web_preview_url: ${{ steps.deploy.outputs.web_preview_url }}
+      admin_preview_url: ${{ steps.deploy.outputs.admin_preview_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update environment variables
+        run: |
+          touch .env
+          echo EMAIL=preview@vercel.com >> .env
+          echo NEXT_PUBLIC_EMAIL=preview_public@vercel.com >> .env
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@33.2.0
+
+      - name: Link Vercel to GitHub Repository
+        run: vercel link --repo --yes --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }}
+
+      - name: Pull Vercel Environment Information
+        run: |
+          if [ "${{ matrix.app }}" == "web" ]; then
+            vercel pull --yes --environment=preview --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/web
+          elif [ "${{ matrix.app }}" == "admin" ]; then
+            vercel pull --yes --environment=preview --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/admin
+          fi
+
+      - name: Build Project Artifacts
+        run: |
+          if [ "${{ matrix.app }}" == "web" ]; then
+            vercel build --token=${{ env.VERCEL_TOKEN }} --scope=hussam-shippercrmc --cwd apps/web
+          elif [ "${{ matrix.app }}" == "admin" ]; then
+            vercel build --token=${{ env.VERCEL_TOKEN }} --scope=hussam-shippercrmc --cwd apps/admin
+          fi
+
+      - name: Deploy Project Artifacts to Vercel
+        id: deploy
+        run: |
+          if [ "${{ matrix.app }}" == "web" ]; then
+          echo web_preview_url=$(vercel deploy --prebuilt --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/web) >> $GITHUB_OUTPUT
+          elif [ "${{ matrix.app }}" == "admin" ]; then
+          echo admin_preview_url=$(vercel deploy --prebuilt --scope=hussam-shippercrmc --token=${{ env.VERCEL_TOKEN }} --cwd apps/admin) >> $GITHUB_OUTPUT
+          fi
